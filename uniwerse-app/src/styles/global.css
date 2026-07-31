@@ -1,0 +1,219 @@
+@import './tokens.css';
+
+*{ box-sizing:border-box; margin:0; padding:0; }
+/* ---------- theme transition ---------- */
+body, .device, .card, .btn, .navbar, .sidebar, .right-rail,
+.field input, .field textarea, .toast, input, textarea, select {
+  transition: background-color .25s ease, color .25s ease, border-color .25s ease, box-shadow .25s ease;
+}
+
+html{ scroll-behavior:smooth; }
+html, body, #root{ height:100%; }
+
+body{
+  font-family:'Inter', sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+  min-height:100vh;
+}
+
+h1,h2,h3, .brand-name, .btn, .tab, .tag, .navlink{
+  font-family:'Space Grotesk', sans-serif;
+}
+
+a{ color:inherit; }
+
+/* ---------- Browser chrome shell ---------- */
+.device{
+  width:100%;
+  max-width:1180px;
+  margin:0 auto;
+  background:var(--cream-panel);
+  border:2px solid var(--ink);
+  border-radius:18px;
+  box-shadow: 8px 8px 0 rgba(16,16,24,0.12);
+  overflow:hidden;
+}
+.device.wide{ max-width:1360px; }
+.device.student{ max-width: 1320px; }
+
+.page-shell{
+  padding:20px 18px 60px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:100vh;
+}
+.page-shell.top{ align-items:flex-start; }
+
+/* ---------- buttons ---------- */
+.btn{
+  font-size:14px; font-weight:600; border:none; border-radius:9px;
+  padding:12px 18px; cursor:pointer;
+  background:var(--navy); color:var(--text-on-accent);
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  transition:background .15s ease, transform .1s ease, box-shadow .15s ease;
+  white-space:nowrap;
+}
+.btn:hover{ background:var(--navy-hover); }
+.btn:active{ transform:scale(0.98); }
+.btn:focus-visible{ outline:none; box-shadow:var(--focus-ring); }
+.btn.outline{ background:transparent; color:var(--ink); border:2px solid var(--ink); }
+.btn.outline:hover{ background:var(--ink); color:var(--text-on-accent); }
+.btn.sm{ padding:8px 13px; font-size:12.5px; }
+.btn.block{ width:100%; }
+.btn-note{ font-size:11.5px; color:var(--muted); text-align:center; margin-top:8px; }
+.btn:disabled{ opacity:0.5; cursor:not-allowed; }
+.btn:disabled:hover{ background:var(--navy); transform:none; }
+.btn.outline:disabled:hover{ background:transparent; color:var(--ink); }
+
+.footer-line{ text-align:center; font-size:13.5px; color:var(--muted); margin-top:8px; }
+.footer-line a{ color:var(--ink); font-weight:700; text-decoration:underline; cursor:pointer; }
+
+/* ---------- pills / tags ---------- */
+.pill{ font-size:11px; font-weight:700; padding:4px 11px; border-radius:999px; display:inline-block; white-space:nowrap; }
+.pill.open{ background:var(--green); color:#fff; }
+.pill.igdtuw{ background:var(--navy); color:var(--cream); }
+.pill.outsiders{ background:var(--pink); color:#fff; }
+.pill.outline{ border:1.5px solid var(--ink); background:var(--cream-panel); color:var(--ink); }
+.pill.guest{ border:1.5px solid var(--cream-line); background:var(--cream); color:var(--muted); }
+
+.tag{ font-size:11.5px; font-weight:600; padding:4px 10px; border:1.5px solid var(--ink); border-radius:999px; background:var(--cream-panel); }
+.tag.soft{ border-color:var(--cream-line); background:var(--cream); color:var(--muted); }
+.tags{ display:flex; flex-wrap:wrap; gap:7px; }
+
+/* ---------- cards ---------- */
+.card{
+  background:var(--cream-panel); border:2px solid var(--ink); border-radius:var(--radius);
+  box-shadow:var(--shadow-soft);
+}
+.divider{ height:1.5px; background:var(--cream-line); }
+
+/* ---------- headings ---------- */
+.eyebrow{ font-size:12.5px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); font-weight:600; margin-bottom:10px; }
+h1.title{ font-size:32px; font-weight:700; margin-bottom:10px; }
+p.sub{ font-size:15px; color:var(--muted); margin-bottom:34px; max-width:520px; line-height:1.55; }
+
+/* ---------- hex decorations ---------- */
+.hex-deco{ position:absolute; pointer-events:none; opacity:0.55; }
+
+/* ---------- toast ---------- */
+.toast{
+  position:fixed; bottom:26px; left:50%; transform:translateX(-50%) translateY(20px);
+  background:var(--ink); color:var(--text-on-accent); font-family:'Space Grotesk',sans-serif;
+  font-size:13px; font-weight:600; padding:12px 20px; border-radius:10px;
+  opacity:0; pointer-events:none; transition:all .25s ease; z-index:999;
+  box-shadow:0 6px 20px rgba(0,0,0,0.25);
+}
+.toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* ---------- misc form fields (shared shape) ---------- */
+.field{ margin-bottom:16px; }
+.field label{ display:block; font-size:13px; font-weight:600; margin-bottom:6px; }
+.field input, .field textarea{
+  width:100%; padding:11px 13px; border:2px solid var(--ink); border-radius:9px;
+  font-size:14px; font-family:'Inter',sans-serif; background:var(--cream-panel); color:var(--ink);
+  transition:box-shadow .15s ease, border-color .15s ease;
+}
+.field input::placeholder, .field textarea::placeholder{ color:#A9A493; }
+.field textarea{ resize:vertical; min-height:100px; }
+.field .hint{ font-size:11.5px; color:var(--muted); margin-top:5px; }
+.field input:focus-visible, .field textarea:focus-visible{ outline:none; box-shadow:var(--focus-ring); border-color:var(--blue); }
+
+/* ---------- empty state (used wherever a list/grid can be empty) ---------- */
+.empty-state{
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center; gap:8px; padding:48px 20px; color:var(--muted);
+  border:1.5px dashed var(--cream-line); border-radius:var(--radius);
+}
+.empty-state .icon{ font-size:28px; margin-bottom:4px; opacity:0.7; }
+.empty-state b{ color:var(--ink); font-size:14.5px; }
+.empty-state p{ font-size:12.5px; max-width:320px; }
+
+/* ---------- skeleton loading ---------- */
+.skeleton{
+  background:linear-gradient(90deg, var(--cream-line) 25%, var(--cream) 37%, var(--cream-line) 63%);
+  background-size:400% 100%;
+  animation:skeleton-loading 1.4s ease infinite;
+  border-radius:8px;
+}
+@keyframes skeleton-loading{
+  0%{ background-position:100% 50%; }
+  100%{ background-position:0 50%; }
+}
+
+/* ---------- generic focus safety net ---------- */
+a:focus-visible, [tabindex]:focus-visible, input[type="checkbox"]:focus-visible{
+  outline:none; box-shadow:var(--focus-ring); border-radius:4px;
+}
+
+::selection{ background:var(--pink-soft); }
+/* ==========================================================
+   RESPONSIVE — global base rules
+   Breakpoints: desktop 1024px+, tablet 768–1023px, mobile <768px
+   ========================================================== */
+
+@media (max-width: 1023px) {
+  .device{ max-width: 100%; border-radius: 14px; }
+  .device.wide{ max-width: 100%; }
+  .device.student{ max-width: 100%; }
+
+  .page-shell{ padding: 20px 12px; }
+
+  h1.title{ font-size: 26px; }
+  p.sub{ font-size: 14px; margin-bottom: 24px; }
+}
+
+@media (max-width: 767px) {
+  .device{ border-radius: 12px; box-shadow: 4px 4px 0 rgba(16,16,24,0.12); }
+
+  .page-shell{ padding: 12px 8px; }
+  .page-shell.top{ padding-top: 12px; }
+
+  h1.title{ font-size: 22px; margin-bottom: 8px; }
+  p.sub{ font-size: 13.5px; margin-bottom: 18px; }
+  .eyebrow{ font-size: 11px; margin-bottom: 6px; }
+
+  .btn{ font-size: 13.5px; padding: 11px 16px; }
+  .btn.sm{ padding: 7px 11px; font-size: 12px; }
+
+  .field input, .field textarea{ font-size: 16px; } /* prevents iOS zoom-on-focus */
+
+  .toast{
+    left: 12px; right: 12px; bottom: 16px;
+    transform: translateY(20px);
+    width: auto; max-width: none;
+    text-align: center;
+  }
+  .toast.show{ transform: translateY(0); }
+
+  .tag{ font-size: 11px; padding: 3px 8px; }
+  .pill{ font-size: 10px; padding: 3px 9px; }
+
+  .empty-state{ padding: 32px 16px; }
+}
+
+@media (max-width: 420px) {
+  h1.title{ font-size: 19px; }
+  .btn{ font-size: 13px; padding: 10px 14px; }
+}
+.theme-toggle{
+  width:34px; height:34px; border-radius:50%;
+  border:1.5px solid var(--cream-line);
+  background:var(--cream-panel);
+  color:var(--ink);
+  font-size:15px;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer;
+  transition:background .15s ease, border-color .15s ease, transform .1s ease;
+  flex:0 0 auto;
+}
+.as-top-row{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.theme-toggle:hover{ background:var(--cream); transform:rotate(15deg); }
+.theme-toggle:focus-visible{ outline:none; box-shadow:var(--focus-ring); }

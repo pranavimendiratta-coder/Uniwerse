@@ -1,0 +1,285 @@
+/* Sidebar shell for the whole Society Head section.
+   Colors are hardcoded to match SocietyLayout's navy sidebar rather than
+   relying on --ink (which resolves to a light color elsewhere in the app). */
+
+.shl-shell {
+  --shl-navy: var(--navy);
+  --shl-navy-light: var(--navy-hover);
+  --shl-navy-border: #2a3d63;
+  --shl-red: var(--pink);
+  --shl-text: var(--cream);
+  --shl-muted: #B9B6AA;
+
+  --amber-soft: #F6E6B4;
+  --purple-soft: #E0D3F6;
+  --amber: #B8860B;
+  --purple: #7C5CBF;
+
+  display: flex;
+  min-height: 100vh;
+  background: var(--cream);
+  color: var(--ink);
+}
+
+.shl-shell * {
+  box-sizing: border-box;
+}
+
+/* ---------- sidebar ---------- */
+.shl-sidebar {
+  width: 250px;
+  flex-shrink: 0;
+  background: var(--shl-navy);
+  color: var(--shl-text);
+  display: flex;
+  flex-direction: column;
+  padding: 20px 18px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.shl-back-btn {
+  align-self: flex-start;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: 1.5px solid var(--shl-navy-border);
+  background: transparent;
+  color: var(--shl-text);
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 18px;
+}
+
+.shl-back-btn:hover {
+  background: var(--shl-navy-light);
+}
+
+.shl-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 800;
+  font-size: 16px;
+  margin-bottom: 14px;
+}
+
+.shl-logo-mark {
+  object-fit: contain;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--shl-text);
+  color: var(--shl-navy);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 12.5px;
+}
+
+.shl-role-pill {
+  display: inline-block;
+  align-self: flex-start;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--shl-text);
+  background: var(--shl-navy-light);
+  border: 1.5px solid var(--shl-navy-border);
+  border-radius: 999px;
+  padding: 4px 12px;
+  margin-bottom: 18px;
+}
+
+.shl-society-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--shl-navy-light);
+  border: 1.5px solid var(--shl-navy-border);
+  border-radius: 12px;
+  padding: 10px 12px;
+  margin-bottom: 20px;
+}
+
+.shl-society-logo {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--purple-soft);
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.shl-society-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.shl-society-name {
+  font-size: 12.5px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.shl-head-name {
+  font-size: 10.5px;
+  color: var(--shl-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.shl-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+}
+
+.shl-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 10px;
+  border-left: 3px solid transparent;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--shl-muted);
+  text-decoration: none;
+}
+
+.shl-nav-item:hover {
+  color: var(--shl-text);
+}
+
+.shl-nav-item.active {
+  color: var(--shl-text);
+  font-weight: 700;
+  border-left-color: var(--shl-red);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.shl-nav-icon {
+  width: 13px;
+  height: 13px;
+  border: 1.5px solid currentColor;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.shl-nav-item.active .shl-nav-icon {
+  background: var(--shl-red);
+  border-color: var(--shl-red);
+}
+
+/* ---------- bottom user row ---------- */
+.shl-user-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-top: 1px solid var(--shl-navy-border);
+  padding-top: 16px;
+  margin-top: 12px;
+}
+
+.shl-user-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--shl-navy-light);
+  border: 1.5px solid var(--shl-navy-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 11.5px;
+  flex-shrink: 0;
+}
+
+.shl-user-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.shl-user-name {
+  font-size: 12.5px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.shl-user-email {
+  font-size: 10.5px;
+  color: var(--shl-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.shl-logout-link {
+  display: inline-block;
+  margin-top: 10px;
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--shl-text);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.shl-logout-link:hover {
+  color: var(--shl-red);
+}
+
+/* ---------- main content ---------- */
+.shl-main {
+  flex: 1;
+  min-width: 0;
+  padding: 26px 32px 60px;
+}
+
+@media (max-width: 900px) {
+  .shl-shell {
+    flex-direction: column;
+  }
+  .shl-sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+  .shl-nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .shl-nav-item {
+    border-left: none;
+    border-bottom: 3px solid transparent;
+  }
+  .shl-nav-item.active {
+    border-left: none;
+    border-bottom-color: var(--shl-red);
+  }
+  .shl-main {
+    padding: 20px 16px 48px;
+  }
+}

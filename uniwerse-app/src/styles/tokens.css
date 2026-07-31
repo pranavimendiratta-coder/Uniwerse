@@ -1,0 +1,56 @@
+:root {
+  --cream: #F4EFE1;
+  --cream-panel: #FFFDF7;
+  --cream-line: #E4DCC4;
+  --ink: #16161D;
+  --navy: #16294F;
+  --navy-dark: #0F1D38;
+  --navy-hover: #1E3563;
+  --green: #4B8B6B;
+  --green-soft: #DDEAE0;
+  --blue: #3E6FA6;
+  --blue-soft: #DCE6F0;
+  --pink: #C74E63;
+  --pink-soft: #F4DEE0;
+  --muted: #6B6759;
+  --radius: 14px;
+  --shadow-hard: 4px 4px 0 var(--ink);
+
+  --shadow-soft: 3px 3px 0 rgba(16,16,24,0.08);
+  --shadow-hover: 6px 6px 0 rgba(16,16,24,0.15);
+  --gap-sm: 10px;
+  --gap-md: 16px;
+  --gap-lg: 24px;
+  --focus-ring: 0 0 0 3px rgba(62,111,166,0.25);
+  --text-on-accent: #FDFCF7;
+}
+
+[data-theme="dark"] {
+  /* Backgrounds — deep navy/charcoal/slate */
+  --cream: #12151C;
+  --cream-panel: #1C212B;
+  --cream-line: #333B48;
+
+  /* Text — high contrast against the backgrounds above */
+  --ink: #F0EEE6;
+  --muted: #B4B6BF;
+
+  /* Brand navy — brightened for use as accent surfaces on dark bg */
+  --navy: #4A72B0;
+  --navy-dark: #16294F;
+  --navy-hover: #5C82BE;
+
+  /* Accents */
+  --green: #6BBE94;
+  --green-soft: #223A2E;
+  --blue: #7DA8DE;
+  --blue-soft: #202B3D;
+  --pink: #E88AA0;
+  --pink-soft: #3B2530;
+
+  /* Shape */
+  --shadow-hard: 4px 4px 0 rgba(0,0,0,0.55);
+  --shadow-soft: 3px 3px 0 rgba(0,0,0,0.4);
+  --shadow-hover: 6px 6px 0 rgba(0,0,0,0.5);
+  --focus-ring: 0 0 0 3px rgba(125,168,222,0.4);
+}
