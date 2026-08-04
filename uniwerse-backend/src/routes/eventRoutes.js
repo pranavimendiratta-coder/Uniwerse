@@ -4,7 +4,7 @@ const {
   createEvent, getEvents, getEventById, registerForEvent, unregisterFromEvent,
   updateEvent, getEventAttendees, checkinStudent, deleteEvent, generateDescription,
   getMyCheckinToken, checkinByToken,
-} = require('../controllers/eventController');
+} = require('../controllers/eventcontroller');
 const { protect } = require('../middleware/authMiddleware');
 
 router.get('/', getEvents);
