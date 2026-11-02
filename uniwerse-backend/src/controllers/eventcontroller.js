@@ -297,10 +297,11 @@ Keep it concise, friendly, and student-facing. Do not include the title as a hea
       Authorization: `Bearer ${apiKey}`,
     },
     body: JSON.stringify({
-      model: 'llama-3.3-70b-versatile',
+      model: process.env.GROQ_MODEL || 'openai/gpt-oss-120b',
       messages: [{ role: 'user', content: prompt }],
       temperature: 0.7,
-      max_tokens: 250,
+      reasoning_effort: 'low',
+      max_completion_tokens: 1000,
     }),
   });
 
