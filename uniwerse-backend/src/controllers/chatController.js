@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const ChatMessage = require('../models/ChatMessage');
 
 const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions';
-const GROQ_MODEL = 'llama-3.3-70b-versatile';
+const GROQ_MODEL = process.env.GROQ_MODEL || 'openai/gpt-oss-120b';
 
 const SYSTEM_PROMPT = `You are the UniWerse Assistant, a helpful chatbot inside a college event management system (UniWerse) for IGDTUW.
 You help students with general questions about using the platform (finding events, registering, managing societies, etc).
@@ -24,7 +24,8 @@ async function callGroq(messages) {
       model: GROQ_MODEL,
       messages,
       temperature: 0.6,
-      max_tokens: 512,
+      reasoning_effort: 'low',
+      max_completion_tokens: 1500,
     }),
   });
 
