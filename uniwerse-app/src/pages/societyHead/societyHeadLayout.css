@@ -3,12 +3,12 @@
    relying on --ink (which resolves to a light color elsewhere in the app). */
 
 .shl-shell {
-  --shl-navy: var(--navy);
-  --shl-navy-light: var(--navy-hover);
-  --shl-navy-border: #2a3d63;
+  --shl-navy: #16294F;
+  --shl-navy-light: #233A63;
+  --shl-navy-border: #2A3D63;
   --shl-red: var(--pink);
-  --shl-text: var(--cream);
-  --shl-muted: #B9B6AA;
+  --shl-text: #FFFFFF;
+  --shl-muted: #CBD5E1;
 
   --amber-soft: #F6E6B4;
   --purple-soft: #E0D3F6;

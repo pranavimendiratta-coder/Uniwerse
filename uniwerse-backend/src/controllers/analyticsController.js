@@ -8,7 +8,13 @@ const getSocietyAnalytics = async (req, res) => {
       return res.status(403).json({ message: 'Only a Society Head can view analytics' });
     }
 
-    const events = await Event.find({ societyName: req.user.society }).sort({ date: 1 });
+    let societyName = req.user.society;
+    if (!societyName) {
+      const user = await User.findById(req.user.id);
+      societyName = user?.society;
+    }
+
+    const events = await Event.find({ societyName }).sort({ date: 1 });
 
     const totalEventsConducted = events.length;
 
@@ -60,9 +66,34 @@ const getSocietyAnalytics = async (req, res) => {
   }
 };
 
+function calculateFallbackHealthScore(stats) {
+  const events = stats.totalEventsConducted || 0;
+  const participants = stats.totalParticipantsThisSemester || 0;
+  const attendanceNum = parseInt(stats.averageAttendance, 10) || 0;
+
+  let score = 65;
+  score += Math.min(events * 5, 20);
+  score += Math.min(Math.round(participants / 10), 10);
+  if (attendanceNum >= 70) score += 5;
+  if (attendanceNum < 30 && events > 0) score -= 10;
+  score = Math.max(45, Math.min(98, score));
+
+  let label = 'Steady';
+  if (score >= 88) label = 'Excellent';
+  else if (score >= 75) label = 'Strong';
+  else if (score >= 60) label = 'Growing';
+  else label = 'Needs Attention';
+
+  const summary = `Active campus performance with ${events} event${events === 1 ? '' : 's'} organized and ${participants} student participants tracked this semester.`;
+
+  return { score, label, summary };
+}
+
 async function callGroqForHealthScore(stats) {
   const apiKey = process.env.GROQ_API_KEY;
-  if (!apiKey) throw new Error('GROQ_API_KEY is not set');
+  if (!apiKey || apiKey === 'YOUR_GROQ_API_KEY_HERE') {
+    return calculateFallbackHealthScore(stats);
+  }
 
   const prompt = `You are analyzing a college society's performance. Based on this real data, give an overall health score from 0-100 and a one-sentence assessment.
 
@@ -76,33 +107,34 @@ Data:
 Respond ONLY in this exact JSON format, nothing else, no markdown:
 {"score": <number 0-100>, "label": "<one or two words e.g. 'Strong', 'Needs Attention', 'Excellent'>", "summary": "<one sentence explanation>"}`;
 
-  const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${apiKey}`,
-    },
-    body: JSON.stringify({
-      model: 'llama-3.3-70b-versatile',
-      messages: [{ role: 'user', content: prompt }],
-      temperature: 0.4,
-      max_tokens: 150,
-    }),
-  });
-
-  if (!response.ok) {
-    const errText = await response.text();
-    throw new Error(`Groq API error (${response.status}): ${errText}`);
-  }
-
-  const data = await response.json();
-  const raw = data.choices?.[0]?.message?.content?.trim() || '{}';
-  const cleaned = raw.replace(/```json|```/g, '').trim();
-
   try {
+    const response = await fetch(process.env.GROQ_URL || 'https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model: process.env.GROQ_MODEL || 'llama-3.3-70b-versatile',
+        messages: [{ role: 'user', content: prompt }],
+        temperature: 0.4,
+        max_tokens: 150,
+      }),
+    });
+
+    if (!response.ok) {
+      console.warn(`Groq API error (${response.status}) for health score. Using statistical fallback.`);
+      return calculateFallbackHealthScore(stats);
+    }
+
+    const data = await response.json();
+    const raw = data.choices?.[0]?.message?.content?.trim() || '{}';
+    const cleaned = raw.replace(/```json|```/g, '').trim();
+
     return JSON.parse(cleaned);
-  } catch {
-    return { score: 50, label: 'Unknown', summary: 'Could not generate an assessment right now.' };
+  } catch (err) {
+    console.warn('Groq health score call failed:', err.message, '- using statistical fallback.');
+    return calculateFallbackHealthScore(stats);
   }
 }
 
@@ -113,7 +145,13 @@ const getHealthScore = async (req, res) => {
       return res.status(403).json({ message: 'Only a Society Head can view this' });
     }
 
-    const events = await Event.find({ societyName: req.user.society });
+    let societyName = req.user.society;
+    if (!societyName) {
+      const user = await User.findById(req.user.id);
+      societyName = user?.society;
+    }
+
+    const events = await Event.find({ societyName });
     const totalEventsConducted = events.length;
 
     const uniqueParticipants = new Set();
@@ -132,8 +170,8 @@ const getHealthScore = async (req, res) => {
 
     const averageAttendance = totalRegistered > 0 ? `${Math.round((totalCheckedIn / totalRegistered) * 100)}%` : '0%';
 
-    const pocCount = await User.countDocuments({ role: 'Student', pocOf: req.user.society });
-    const headCount = await User.countDocuments({ role: 'Society Head', society: req.user.society });
+    const pocCount = await User.countDocuments({ role: 'Student', pocOf: societyName });
+    const headCount = await User.countDocuments({ role: 'Society Head', society: societyName });
 
     const result = await callGroqForHealthScore({
       totalEventsConducted,

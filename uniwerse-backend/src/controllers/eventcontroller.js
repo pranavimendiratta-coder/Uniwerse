@@ -263,9 +263,24 @@ const deleteEvent = async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 };
+function generateFallbackDescription(title, category, venue, audience) {
+  const eventTitle = title?.trim() || 'Campus Event';
+  const eventCategory = category?.trim() || 'special event';
+  const eventVenue = venue?.trim() || 'IGDTUW Campus';
+  const audienceText = audience === 'igdtuw'
+    ? 'exclusive to IGDTUW students'
+    : audience === 'outsiders'
+    ? 'open primarily to outside participants'
+    : 'open to students across all colleges';
+
+  return `Get ready for ${eventTitle}, an exciting ${eventCategory} designed to spark collaboration, creativity, and hands-on learning. Join us at ${eventVenue} for an immersive campus experience featuring interactive sessions, peer networking, and competitive fun. This event is ${audienceText}—reserve your spot today on UniWerse and don't miss out!`;
+}
+
 async function callGroqForDescription(title, category, venue, audience) {
   const apiKey = process.env.GROQ_API_KEY;
-  if (!apiKey) throw new Error('GROQ_API_KEY is not set');
+  if (!apiKey || apiKey === 'YOUR_GROQ_API_KEY_HERE') {
+    return generateFallbackDescription(title, category, venue, audience);
+  }
 
   const prompt = `Write a short, engaging event description (3-5 sentences) for a college event with these details:
 Title: ${title || 'Untitled Event'}
@@ -275,27 +290,32 @@ Audience: ${audience === 'igdtuw' ? 'IGDTUW students only' : audience === 'outsi
 
 Keep it concise, friendly, and student-facing. Do not include the title as a heading. Just return the description text, nothing else.`;
 
-  const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${apiKey}`,
-    },
-    body: JSON.stringify({
-      model: 'llama-3.3-70b-versatile',
-      messages: [{ role: 'user', content: prompt }],
-      temperature: 0.7,
-      max_tokens: 250,
-    }),
-  });
+  try {
+    const response = await fetch(process.env.GROQ_URL || 'https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model: process.env.GROQ_MODEL || 'llama-3.3-70b-versatile',
+        messages: [{ role: 'user', content: prompt }],
+        temperature: 0.7,
+        max_tokens: 250,
+      }),
+    });
 
-  if (!response.ok) {
-    const errText = await response.text();
-    throw new Error(`Groq API error (${response.status}): ${errText}`);
+    if (!response.ok) {
+      console.warn(`Groq API error (${response.status}) when generating description. Using smart fallback.`);
+      return generateFallbackDescription(title, category, venue, audience);
+    }
+
+    const data = await response.json();
+    return data.choices?.[0]?.message?.content?.trim() || generateFallbackDescription(title, category, venue, audience);
+  } catch (err) {
+    console.warn('Groq description call failed:', err.message, '- using smart fallback.');
+    return generateFallbackDescription(title, category, venue, audience);
   }
-
-  const data = await response.json();
-  return data.choices?.[0]?.message?.content?.trim() || 'Could not generate a description right now.';
 }
 
 // POST /api/events/generate-description — POC only
@@ -307,7 +327,8 @@ const generateDescription = async (req, res) => {
     const description = await callGroqForDescription(title, category, venue, audience);
     res.status(200).json({ description });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    const fallback = generateFallbackDescription(req.body?.title, req.body?.category, req.body?.venue, req.body?.audience);
+    res.status(200).json({ description: fallback });
   }
 };
 // GET /api/events/:id/my-checkin-token — a registered student gets their unique QR payload

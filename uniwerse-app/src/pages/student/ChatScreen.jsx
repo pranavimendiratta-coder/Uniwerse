@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useToast } from '../../context/ToastContext';
 import { useAuth } from '../../context/AuthContext';
 
-const API_URL = `${import.meta.env.VITE_API_URL}/api/chat`;
+const API_URL = `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/chat`;
 const SUGGESTIONS = ['Outsider-open events', 'How to register?', 'My events', 'Event QR help'];
 
 export default function ChatScreen() {
