@@ -7,18 +7,33 @@ const jwt = require('jsonwebtoken');
 // POST /api/events — only a Student who is POC for that society
 const createEvent = async (req, res) => {
   try {
-    const { title, societyId, category, about, date, time, venue, capacity, audience, registrationDeadline, checklist } = req.body;
-
-    const society = await Society.findById(societyId);
-    if (!society) return res.status(404).json({ message: 'Society not found' });
+    const { title, societyId, societyName, category, about, date, time, venue, capacity, audience, registrationDeadline, checklist } = req.body;
 
     if (req.user.role !== 'Student') {
       return res.status(403).json({ message: 'Only a society POC can create events' });
     }
 
     const student = await User.findById(req.user.id);
-    const isPoc = student && student.pocOf.includes(society.name);
+    if (!student) return res.status(404).json({ message: 'User not found' });
 
+    // Find the society: by id if given, otherwise by name (case/space-insensitive).
+    const norm = (v) => String(v || '').trim().toLowerCase();
+    let society = societyId ? await Society.findById(societyId).catch(() => null) : null;
+
+    const wantedName = societyName || (society && society.name) || student.pocOf[0];
+    if (!society && wantedName) {
+      const all = await Society.find();
+      society = all.find((s) => norm(s.name) === norm(wantedName)) || null;
+    }
+
+    // Still not found? Create it from the POC's own society name so publishing never gets stuck.
+    if (!society) {
+      const pocName = student.pocOf.find((n) => norm(n) === norm(wantedName));
+      if (!pocName) return res.status(403).json({ message: 'You are not a POC for this society' });
+      society = await Society.create({ name: pocName.trim(), category: 'General' });
+    }
+
+    const isPoc = student.pocOf.some((n) => norm(n) === norm(society.name));
     if (!isPoc) {
       return res.status(403).json({ message: 'You are not a POC for this society' });
     }
