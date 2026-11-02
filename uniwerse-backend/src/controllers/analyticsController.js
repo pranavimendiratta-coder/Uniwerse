@@ -83,10 +83,11 @@ Respond ONLY in this exact JSON format, nothing else, no markdown:
       Authorization: `Bearer ${apiKey}`,
     },
     body: JSON.stringify({
-      model: 'llama-3.3-70b-versatile',
+      model: process.env.GROQ_MODEL || 'openai/gpt-oss-120b',
       messages: [{ role: 'user', content: prompt }],
       temperature: 0.4,
-      max_tokens: 150,
+      reasoning_effort: 'low',
+      max_completion_tokens: 800,
     }),
   });
 
