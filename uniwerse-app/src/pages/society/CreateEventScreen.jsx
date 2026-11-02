@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from 'react';
 import { useToast } from '../../context/ToastContext';
 import { useAuth } from '../../context/AuthContext';
@@ -57,7 +56,6 @@ export default function CreateEventScreen() {
 const [societyId, setSocietyId] = useState(null);
 const [isPublishing, setIsPublishing] = useState(false);
 const managedSociety = pocOf && pocOf[0];
-console.log('pocOf:', pocOf, 'managedSociety:', managedSociety);
 
 useEffect(() => {
   async function findSocietyId() {
@@ -65,7 +63,8 @@ useEffect(() => {
     try {
       const res = await fetch(SOCIETIES_API);
       const societies = await res.json();
-      const match = societies.find((s) => s.name === managedSociety);
+      const norm = (v) => String(v || '').trim().toLowerCase();
+      const match = societies.find((s) => norm(s.name) === norm(managedSociety));
       if (match) setSocietyId(match._id);
     } catch (err) {
       console.error('Failed to load society', err);
@@ -133,7 +132,7 @@ async function handleGenerateDescription() {
   async function handlePublish() {
   if (!title.trim()) { showToast('Please add an event title'); return; }
   if (!date) { showToast('Please set an event date'); return; }
-  if (!societyId) { showToast('Could not determine your society — try refreshing'); return; }
+  if (!managedSociety) { showToast('You are not a POC for any society yet — ask your Society Head to add you'); return; }
 
   setIsPublishing(true);
   try {
@@ -146,6 +145,7 @@ async function handleGenerateDescription() {
     body: JSON.stringify({
         title: title.trim(),
         societyId,
+        societyName: managedSociety,
         category: tags[0] || '',
         about: description,
         date,
