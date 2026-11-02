@@ -217,3 +217,90 @@ a:focus-visible, [tabindex]:focus-visible, input[type="checkbox"]:focus-visible{
 }
 .theme-toggle:hover{ background:var(--cream); transform:rotate(15deg); }
 .theme-toggle:focus-visible{ outline:none; box-shadow:var(--focus-ring); }
+
+/* ---------- Inputs & Controls Visibility Guarantee ---------- */
+input, select, textarea {
+  color: var(--ink);
+  background-color: var(--input-bg);
+  border-color: var(--input-border);
+}
+input::placeholder, textarea::placeholder {
+  color: var(--muted);
+  opacity: 0.85;
+}
+
+/* ---------- Enhanced Dark Theme Consistency ---------- */
+[data-theme="dark"] .device {
+  border-color: var(--card-border);
+  box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.45);
+}
+
+[data-theme="dark"] .card {
+  border-color: var(--card-border);
+  background: var(--card-bg);
+  color: var(--ink);
+}
+
+[data-theme="dark"] .btn.outline {
+  border-color: var(--card-border);
+  color: var(--ink);
+}
+
+[data-theme="dark"] .btn.outline:hover {
+  background: var(--cream-line);
+  color: var(--ink);
+}
+
+[data-theme="dark"] .notice {
+  background: rgba(96, 165, 250, 0.12);
+  color: #93C5FD;
+  border-color: rgba(96, 165, 250, 0.3);
+}
+
+[data-theme="dark"] .notice.locked {
+  background: rgba(52, 211, 153, 0.12);
+  color: #6EE7B7;
+  border-color: rgba(52, 211, 153, 0.3);
+}
+
+[data-theme="dark"] .pill.outline,
+[data-theme="dark"] .tag {
+  border-color: var(--card-border);
+  background: var(--cream-panel);
+  color: var(--ink);
+}
+
+[data-theme="dark"] .pill.open {
+  background: var(--green);
+  color: #0B0E14;
+}
+
+[data-theme="dark"] .pill.igdtuw {
+  background: var(--navy);
+  color: #FFFFFF;
+}
+
+[data-theme="dark"] .pill.outsiders {
+  background: var(--pink);
+  color: #FFFFFF;
+}
+
+[data-theme="dark"] .toast {
+  background: var(--cream-panel);
+  color: var(--ink);
+  border: 1.5px solid var(--card-border);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="dark"] .field input,
+[data-theme="dark"] .field textarea {
+  background: var(--input-bg);
+  border-color: var(--input-border);
+  color: var(--ink);
+}
+
+/* QR Code Display must always have clean white backing for camera readability */
+.qr-visual, .qr-code-box, .qr-container, [data-qr-code] {
+  background: #FFFFFF !important;
+  color: #000000 !important;
+}

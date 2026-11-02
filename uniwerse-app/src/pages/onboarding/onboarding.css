@@ -153,12 +153,12 @@
 
 /* ===== login screen ===== */
 .login-wrap{ width:100%; max-width:400px; margin-left:auto; }
-.tabs{ display:flex; border:2px solid var(--ink); border-radius:10px; overflow:hidden; margin-bottom:20px; }
+.tabs{ display:flex; border:2px solid var(--card-border, var(--ink)); border-radius:10px; overflow:hidden; margin-bottom:20px; }
 .tab{ flex:1; text-align:center; padding:11px 0; font-size:13.5px; font-weight:600; cursor:pointer; background:var(--cream-panel); color:var(--muted); border:none; font-family:'Space Grotesk',sans-serif; }
-.tab.active{ background:var(--ink); color:var(--cream-panel); }
+.tab.active{ background:var(--navy); color:#FFFFFF; }
 .notice{
   background:var(--blue-soft); border:1.5px solid var(--blue); border-radius:10px;
-  padding:13px 15px; font-size:12.5px; color:#274a6b; line-height:1.5; margin-bottom:20px;
+  padding:13px 15px; font-size:12.5px; color:var(--ink); line-height:1.5; margin-bottom:20px;
 }
 .notice b{ color:var(--ink); }
 .notice.locked{ background:var(--green-soft); border-color:var(--green); color:var(--ink); }
@@ -206,4 +206,34 @@
   .role-row{ padding: 14px; }
   .guest-card{ padding: 18px 16px; }
   .perm-grid{ gap: 8px; }
+}
+
+/* ============ DARK MODE OVERRIDES ============ */
+[data-theme="dark"] .pane-right {
+  background: var(--cream-panel);
+  color: var(--ink);
+}
+
+[data-theme="dark"] .entry-card,
+[data-theme="dark"] .role-card,
+[data-theme="dark"] .guest-card,
+[data-theme="dark"] .role-row {
+  background: var(--card-bg);
+  border-color: var(--card-border);
+  color: var(--ink);
+}
+
+[data-theme="dark"] .role-row:hover {
+  background: var(--cream-line);
+}
+
+[data-theme="dark"] .role-row.selected {
+  border-color: var(--navy);
+  background: rgba(37, 99, 235, 0.1);
+}
+
+[data-theme="dark"] .login-wrap input {
+  background: var(--input-bg);
+  border-color: var(--input-border);
+  color: var(--ink);
 }

@@ -2,6 +2,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const User = require('../models/User');
+const Society = require('../models/Society');
 
 function generateToken(user) {
   return jwt.sign(
@@ -36,8 +37,22 @@ const register = async (req, res) => {
       email,
       password: hashedPassword,
       role,
-      society: role === 'Society Head' ? society : null,
+      society: role === 'Society Head' ? society.trim() : null,
     });
+
+    if (role === 'Society Head' && society?.trim()) {
+      const existingSociety = await Society.findOne({
+        name: { $regex: new RegExp(`^${society.trim()}$`, 'i') },
+      });
+      if (!existingSociety) {
+        await Society.create({
+          name: society.trim(),
+          category: 'General',
+          description: `${society.trim()} at IGDTUW`,
+          logoInitials: society.trim().slice(0, 2).toUpperCase(),
+        });
+      }
+    }
 
     const token = generateToken(user);
 

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
 
-const SOCIETIES_API = `${import.meta.env.VITE_API_URL}/api/societies`;
+const SOCIETIES_API = `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/societies`;
 
 const COLORS = ['blue', 'purple', 'green', 'amber', 'pink'];
 
@@ -76,6 +76,7 @@ export default function TeamScreen() {
   }, [token]);
 
   async function persistTeam(nextMembers) {
+    const previous = members;
     setMembers(nextMembers);
     try {
       const res = await fetch(`${SOCIETIES_API}/mine`, {
@@ -86,9 +87,18 @@ export default function TeamScreen() {
         },
         body: JSON.stringify({ execTeam: nextMembers }),
       });
-      if (!res.ok) throw new Error('Failed to save team');
+      const data = await res.json();
+      if (!res.ok) {
+        setMembers(previous);
+        throw new Error(data.message || 'Failed to save team');
+      }
+      showToast('Team updated successfully!');
+      if (data.execTeam) {
+        setMembers(data.execTeam);
+      }
     } catch (err) {
-      showToast(err.message);
+      setMembers(previous);
+      showToast(err.message || 'Could not save team member');
     }
   }
 

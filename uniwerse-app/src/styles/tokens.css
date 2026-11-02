@@ -2,6 +2,10 @@
   --cream: #F4EFE1;
   --cream-panel: #FFFDF7;
   --cream-line: #E4DCC4;
+  --card-bg: #FFFDF7;
+  --card-border: #16161D;
+  --input-bg: #FFFFFF;
+  --input-border: #16161D;
   --ink: #16161D;
   --navy: #16294F;
   --navy-dark: #0F1D38;
@@ -12,6 +16,8 @@
   --blue-soft: #DCE6F0;
   --pink: #C74E63;
   --pink-soft: #F4DEE0;
+  --amber: #B8860B;
+  --amber-soft: #F6E6B4;
   --muted: #6B6759;
   --radius: 14px;
   --shadow-hard: 4px 4px 0 var(--ink);
@@ -26,31 +32,38 @@
 }
 
 [data-theme="dark"] {
-  /* Backgrounds — deep navy/charcoal/slate */
-  --cream: #12151C;
-  --cream-panel: #1C212B;
-  --cream-line: #333B48;
+  /* Premium Dark Theme surfaces — sleek obsidian/slate */
+  --cream: #0B0E14;
+  --cream-panel: #141A24;
+  --cream-line: #222C3D;
+  --card-bg: #141A24;
+  --card-border: #2A3649;
+  --input-bg: #0D121B;
+  --input-border: #2A3649;
 
-  /* Text — high contrast against the backgrounds above */
-  --ink: #F0EEE6;
-  --muted: #B4B6BF;
+  /* Typography — crisp & anti-glare */
+  --ink: #F1F5F9;
+  --muted: #94A3B8;
 
-  /* Brand navy — brightened for use as accent surfaces on dark bg */
-  --navy: #4A72B0;
-  --navy-dark: #16294F;
-  --navy-hover: #5C82BE;
+  /* Primary Brand Buttons — stylish & visible */
+  --navy: #2563EB;
+  --navy-dark: #1D4ED8;
+  --navy-hover: #3B82F6;
 
-  /* Accents */
-  --green: #6BBE94;
-  --green-soft: #223A2E;
-  --blue: #7DA8DE;
-  --blue-soft: #202B3D;
-  --pink: #E88AA0;
-  --pink-soft: #3B2530;
+  /* Clean Accents */
+  --green: #10B981;
+  --green-soft: rgba(16, 185, 129, 0.16);
+  --blue: #38BDF8;
+  --blue-soft: rgba(56, 189, 248, 0.16);
+  --pink: #F43F5E;
+  --pink-soft: rgba(244, 63, 94, 0.16);
+  --amber: #F59E0B;
+  --amber-soft: rgba(245, 158, 11, 0.16);
 
-  /* Shape */
-  --shadow-hard: 4px 4px 0 rgba(0,0,0,0.55);
-  --shadow-soft: 3px 3px 0 rgba(0,0,0,0.4);
-  --shadow-hover: 6px 6px 0 rgba(0,0,0,0.5);
-  --focus-ring: 0 0 0 3px rgba(125,168,222,0.4);
+  /* Shadows */
+  --shadow-hard: 4px 4px 0 rgba(0,0,0,0.6);
+  --shadow-soft: 3px 3px 0 rgba(0,0,0,0.45);
+  --shadow-hover: 6px 6px 0 rgba(0,0,0,0.65);
+  --focus-ring: 0 0 0 3px rgba(56, 189, 248, 0.35);
+  --text-on-accent: #FFFFFF;
 }

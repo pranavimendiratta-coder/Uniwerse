@@ -45,8 +45,9 @@
 }
 
 .shd-btn {
-  border: 2px solid var(--ink);
-  background: #fff;
+  border: 2px solid var(--card-border, var(--ink));
+  background: var(--card-bg, #fff);
+  color: var(--ink);
   border-radius: 10px;
   padding: 9px 16px;
   font-size: 13px;
@@ -61,8 +62,9 @@
 }
 
 .shd-btn.primary {
-  background: var(--ink);
-  color: var(--cream);
+  background: var(--navy);
+  color: #fff;
+  border-color: var(--navy);
 }
 
 .shd-btn.small {
@@ -94,8 +96,9 @@
 
 /* ---------- generic card ---------- */
 .shd-card {
-  background: #fff;
-  border: 2px solid var(--ink);
+  background: var(--card-bg, #fff);
+  border: 2px solid var(--card-border, var(--ink));
+  color: var(--ink);
   border-radius: 14px;
   padding: 20px 22px;
   box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.14);
@@ -698,19 +701,23 @@
 }
 /* ---------- team management: add button ---------- */
 .add-member-btn {
-  border: 2px solid var(--ink);
-  background: var(--ink);
-  color: var(--cream);
+  border: 2px solid var(--navy);
+  background: var(--navy);
+  color: #fff;
   border-radius: 10px;
   padding: 9px 16px;
   font-size: 13px;
   font-weight: 700;
   cursor: pointer;
   box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.18);
-  transition: transform 0.12s ease;
+  transition: transform 0.12s ease, background 0.12s ease;
   white-space: nowrap;
 }
-.add-member-btn:hover { transform: translate(-1px, -1px); }
+.add-member-btn:hover {
+  background: var(--navy-hover);
+  border-color: var(--navy-hover);
+  transform: translate(-1px, -1px);
+}
 
 /* ---------- exec row: editable state ---------- */
 .exec-row--editable {
@@ -796,12 +803,12 @@
 
 .exec-form input,
 .exec-form select {
-  border: 2px solid var(--ink);
+  border: 2px solid var(--input-border, var(--ink));
   border-radius: 9px;
   padding: 9px 11px;
   font-size: 13.5px;
   font-family: inherit;
-  background: #fff;
+  background: var(--input-bg, #fff);
   color: var(--ink);
 }
 
@@ -814,7 +821,7 @@
 
 .exec-form-cancel,
 .exec-form-submit {
-  border: 2px solid var(--ink);
+  border: 2px solid var(--card-border, var(--ink));
   border-radius: 9px;
   padding: 8px 16px;
   font-size: 13px;
@@ -824,13 +831,14 @@
 }
 
 .exec-form-cancel {
-  background: #fff;
+  background: var(--card-bg, #fff);
   color: var(--ink);
 }
 
 .exec-form-submit {
-  background: var(--ink);
-  color: var(--cream);
+  background: var(--navy);
+  color: #fff;
+  border-color: var(--navy);
 }
 /* ---------- org tree ---------- */
 .exec-tree {
@@ -1248,3 +1256,47 @@
 
 /* reuse accent for section titles as a subtle nod to theme */
 .shd-card-title { border-left: 3px solid var(--accent); padding-left: 10px; }
+
+/* ============ DARK MODE OVERRIDES ============ */
+[data-theme="dark"] .shd-card,
+[data-theme="dark"] .shd-stat-box,
+[data-theme="dark"] .shd-table-card,
+[data-theme="dark"] .shd-modal,
+[data-theme="dark"] .poc-update-card,
+[data-theme="dark"] .poc-update-modal,
+[data-theme="dark"] .exec-row,
+[data-theme="dark"] .exec-modal,
+[data-theme="dark"] .profile-hero-card,
+[data-theme="dark"] .profile-section-card,
+[data-theme="dark"] .profile-cta,
+[data-theme="dark"] .profile-edit-input,
+[data-theme="dark"] .exec-form input,
+[data-theme="dark"] .exec-form select {
+  background: var(--card-bg);
+  border-color: var(--card-border);
+  color: var(--ink);
+}
+
+[data-theme="dark"] .shd-card-title,
+[data-theme="dark"] .shd-title,
+[data-theme="dark"] .exec-name,
+[data-theme="dark"] .exec-modal-title,
+[data-theme="dark"] .profile-section-title {
+  color: var(--ink);
+}
+
+[data-theme="dark"] .shd-subtitle,
+[data-theme="dark"] .exec-role,
+[data-theme="dark"] .exec-meta,
+[data-theme="dark"] .profile-field-label {
+  color: var(--muted);
+}
+
+[data-theme="dark"] .exec-row:hover {
+  background: var(--cream-line);
+}
+
+[data-theme="dark"] .notif-row.unread {
+  background: rgba(37, 99, 235, 0.12);
+  border-color: rgba(37, 99, 235, 0.3);
+}

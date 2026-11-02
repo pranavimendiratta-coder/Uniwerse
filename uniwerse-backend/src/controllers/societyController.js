@@ -44,25 +44,68 @@ const updateSociety = async (req, res) => {
   }
 };
 
+// Helper to resolve society name safely for a logged-in user
+async function resolveUserSociety(userObj) {
+  if (userObj?.society && userObj.society.trim()) return userObj.society.trim();
+  if (userObj?.id) {
+    const freshUser = await User.findById(userObj.id);
+    if (freshUser?.society && freshUser.society.trim()) return freshUser.society.trim();
+  }
+  return null;
+}
+
 // GET /api/societies/mine — the logged-in Head's own society
 const getMySociety = async (req, res) => {
   try {
     if (req.user.role !== 'Society Head') return res.status(403).json({ message: 'Only a Society Head has a society to manage' });
-    const society = await Society.findOne({ name: req.user.society });
-    if (!society) return res.status(404).json({ message: 'Society not found' });
+
+    const societyName = await resolveUserSociety(req.user);
+    if (!societyName) return res.status(400).json({ message: 'No society associated with this Society Head account' });
+
+    let society = await Society.findOne({ name: { $regex: new RegExp(`^${societyName}$`, 'i') } });
+
+    if (!society) {
+      society = await Society.create({
+        name: societyName,
+        category: 'General',
+        description: `${societyName} at IGDTUW`,
+        logoInitials: societyName.slice(0, 2).toUpperCase(),
+      });
+    }
+
     const withCounts = await attachLiveCounts(society);
     res.status(200).json(withCounts);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
+
 // PATCH /api/societies/mine — update the logged-in Head's own society
 const updateMySociety = async (req, res) => {
   try {
     if (req.user.role !== 'Society Head') return res.status(403).json({ message: 'Only a Society Head can edit a society' });
-    const society = await Society.findOneAndUpdate({ name: req.user.society }, req.body, { new: true });
-    if (!society) return res.status(404).json({ message: 'Society not found' });
-    res.status(200).json(society);
+
+    const societyName = await resolveUserSociety(req.user);
+    if (!societyName) return res.status(400).json({ message: 'No society associated with this Society Head account' });
+
+    let society = await Society.findOneAndUpdate(
+      { name: { $regex: new RegExp(`^${societyName}$`, 'i') } },
+      { $set: req.body },
+      { new: true }
+    );
+
+    if (!society) {
+      society = await Society.create({
+        name: societyName,
+        category: req.body.category || 'General',
+        description: req.body.description || `${societyName} at IGDTUW`,
+        logoInitials: req.body.logoInitials || societyName.slice(0, 2).toUpperCase(),
+        ...req.body,
+      });
+    }
+
+    const withCounts = await attachLiveCounts(society);
+    res.status(200).json(withCounts);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }

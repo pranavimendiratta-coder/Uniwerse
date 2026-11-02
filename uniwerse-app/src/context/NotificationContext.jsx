@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { useAuth } from './AuthContext';
 
-const API_URL = `${import.meta.env.VITE_API_URL}/api/notifications`;
+const API_URL = `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/notifications`;
 
 const NotificationContext = createContext(null);
 
